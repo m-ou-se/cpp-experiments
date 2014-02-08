@@ -1,0 +1,20 @@
+In some languages, defining a enum just like
+
+    enum Color { red, green, blue, yellow };
+
+also gives you access to the strings "red", "green", etc. at run time.
+This can be handy if you want to define a operator<<(std::ostream&, Color),
+or operator>>(std::istream&, Color&).
+
+C++ doesn't do this, which means you'll have to provide the names of the
+enum values as strings yourself, if you need them.
+
+This experiment abuses the preprocessor to generate a mapping from the
+enum values to strings, and from strings to the enum values:
+
+    MAGIC_ENUM(Color, (red)(green)(blue)(yellow))
+
+This will not only define enum Color, but also defines Color_names as
+an array of strings {"red", "green", ...}, defines Color_values as a
+map {{"red", red}, ... }, and defines Color_size.
+
