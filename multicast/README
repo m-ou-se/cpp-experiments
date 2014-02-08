@@ -1,0 +1,11 @@
+Somebody on IRC said it'd be handy if you could write
+    static_cast<A, B, C>(x)
+instead of:
+    static_cast<A>(static_cast<B>(static_cast<C>(x)))
+
+multicast.cpp shows an implementation of `static_multicast`,
+which does exactly this.
+
+(You could #define static_cast static_multicast after defining
+static_multicast, to allow `static_cast<A, B, C>` instead of having
+to write `static_multicast<A, B, C>`.)
