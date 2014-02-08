@@ -1,2 +1,2 @@
-CXXFLAGS=-std=c++11 -Wall -Wextra
-multicast:
+CXXFLAGS=-std=c++11 -O2 -Wall -Wextra
+test:

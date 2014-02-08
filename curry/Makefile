@@ -1,2 +1,2 @@
-curry: curry.cpp
-	g++ -std=c++11 -g -O3 -o $@ $^
+CXXFLAGS=-std=c++11 -O2 -Wall -Wextra
+test:
