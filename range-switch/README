@@ -2,16 +2,20 @@ There was a discussion on the std-proposals mailing list about
 adding support for 'case ranges' in a switch. Something like:
 
     switch (x) {
-        case 5..10: ...
+        case  5 ... 10: stuff();
+        case 10 ... 15: stuff();
     }
+
+(Note that there's a GNU extension that allows this:
+    http://gcc.gnu.org/onlinedocs/gcc-4.5.4/gcc/Case-Ranges.html)
 
 Somebody mentioned that this could already be done using lambdas
 and a function that calls the right one after giving it lambdas,
 ranges, and x. Something like:
 
     range_switch(x,
-        5, 10, [&](){ ... },
-        ...
+         5, 10, [&](){ stuff(); },
+        10, 15, [&](){ stuff(); },
     );
 
 This is an extension of that idea: It hides the `[&](){}` syntax
@@ -21,3 +25,4 @@ supports the 'break;' statement to prevent that.
 It does, however, break the 'continue;' statement. (It behaves
 just like `break;`.) So you can't continue a loop from a
 range_switch within the loop.
+
