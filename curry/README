@@ -1,0 +1,42 @@
+Somebody on ##C++ on Freenode (I don't remember who), asked if it would be
+possible in C++ to 'curry' functions. That is, to std::bind parameters to
+a function simply by giving it not enough parameters. (Similar to what's
+possible in Haskell.)
+
+In this experiment, I show this is possible:
+
+    foo(1,2,3) == curry(f)(1)(2)(3)
+
+However, it is limited, because of a fundamental issue:
+
+If the function-like object foo can be called as both `foo(int)`
+and `foo(int, int)` (e.g. because it has multiple overloads for `operator ()`)
+then what should curry(foo)(1) do? Call foo with `1` as parameter, or
+return a function-like object that accepts an integer and then calls the
+foo with two integers (the first being `1`)?
+
+The solution I choose is a very simple one: If it can call the function,
+it does that. Otherwise, it captures the parameter to be called later.
+(That means that you cannot call `foo` with two integers.)
+
+Unfortunately, this means that if you give a parameter of incompatible
+type, it'll happily take it:
+
+    struct {
+        operator ()(int) {};
+    } bar;
+    auto x = curry(bar)("asdf"); // Compiles fine
+
+This just compiles, because it doesn't and can't know there isn't
+a overload of operator() that takes a char const* as first parameter.
+(So if `operator ()(char const *, float)` exists, `x(1.5f)` would just work.)
+So you can just call `x(1)(2)(3)(4)(5)(6)...` till the end of time,
+and you'll always get just a new `curried_function` object,
+which represents a function with some parameters bound to it.
+
+Also, I only implemented it for taking one parameter at a time:
+
+    curry(f)(1)(2)(3) // works
+    curry(f)(1,2)(3) // doesn't work
+
+(But it shouldn't be much effort to make this work as well.)
