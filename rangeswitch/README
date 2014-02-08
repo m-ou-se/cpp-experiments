@@ -1,0 +1,23 @@
+There was a discussion on the std-proposals mailing list about
+adding support for 'case ranges' in a switch. Something like:
+
+    switch (x) {
+        case 5..10: ...
+    }
+
+Somebody mentioned that this could already be done using lambdas
+and a function that calls the right one after giving it lambdas,
+ranges, and x. Something like:
+
+    range_switch(x,
+        5, 10, [&](){ ... },
+        ...
+    );
+
+This is an extension of that idea: It hides the `[&](){}` syntax
+from the user, and allows falling through to the next case, and
+supports the 'break;' statement to prevent that.
+
+It does, however, break the 'continue;' statement. (It behaves
+just like `break;`.) So you can't continue a loop from a
+range_switch within the loop.
