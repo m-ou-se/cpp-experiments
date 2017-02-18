@@ -1,0 +1,6 @@
+This experiment shows how to access private members of classes you're not
+friends with, without breaking the rules.
+
+To access the private 'int secret;' of a class called 'Foo', call the macro
+make_getter(Foo, int, secret) to define a function called get_secret which will
+give you an int& to the 'secret' given a Foo&.
